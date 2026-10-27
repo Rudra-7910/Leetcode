@@ -1,8 +1,6 @@
 class Solution {
 public:
-
     vector<vector<int>> dp;
-
 int sum (vector<int> & nums)
 {
     int sumi =0 ; 
@@ -10,28 +8,22 @@ int sum (vector<int> & nums)
     {
         sumi = sumi + nums[i];
     }
-
     return sumi;
 }
-
 bool solve ( int i , vector<int> & nums , int target )
 {
     if(target==0)
     {
         return true;
     }
-
     if(i>=nums.size() || target <0)
     {
         return false;
     }
-
     if (dp[i][target] != -1) {
             return dp[i][target];
     }
-
     bool take= solve(i+1, nums, target- nums[i]);
-
     bool notTake= solve(i+1,nums,target);
 
         return dp[i][target] = take || notTake;
