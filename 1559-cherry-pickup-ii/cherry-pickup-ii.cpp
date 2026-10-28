@@ -1,58 +1,47 @@
 class Solution {
-    static constexpr int NEG = -100000000;
-    vector<vector<vector<int>>> dp;
-    int solve(int row, int col1, int col2,vector<vector<int>>& grid) {
-        int rows = grid.size();
-        int cols = grid[0].size();
-        if (col1 < 0 || col1 >= cols ||
-            col2 < 0 || col2 >= cols) {
-            return NEG;
+public:
+    int solve(int row, int col1, int col2,vector<vector<int>>& grid, vector<vector<vector<int>>>& dp,int n, int m) {
+        if (col1 < 0 || col1 >= m ||
+            col2 < 0 || col2 >= m) {
+            return -100000000;
         }
+
         if (dp[row][col1][col2] != -1) {
             return dp[row][col1][col2];
         }
-        int current = grid[row][col1];
-
-        if (col1 != col2) {
+        int current = 0;
+        if (col1 == col2) {
+            current += grid[row][col1];
+        } else {
+            current += grid[row][col1];
             current += grid[row][col2];
         }
-
-        if (row == rows - 1) {
-            return dp[row][col1][col2] = current;
+        if (row == n - 1) {
+            dp[row][col1][col2] = current;
+            return current;
         }
-
-        int bestNext = NEG;
-
+        int bestNext = -100000000;
         for (int d1 = -1; d1 <= 1; d1++) {
+
             for (int d2 = -1; d2 <= 1; d2++) {
 
-                int next = solve(
-                    row + 1,
-                    col1 + d1,
-                    col2 + d2,
-                    grid
-                );
+                int nextCol1 = col1 + d1;
+                int nextCol2 = col2 + d2;
 
-                bestNext = max(bestNext, next);
+                int next = solve(row + 1,nextCol1,nextCol2,grid,dp,n,m);
+                if (next > bestNext) {
+                    bestNext = next;
+                }
             }
         }
-
-        return dp[row][col1][col2] = current + bestNext;
+        dp[row][col1][col2] = current + bestNext;
+        return dp[row][col1][col2];
     }
 
-public:
     int cherryPickup(vector<vector<int>>& grid) {
-        int rows = grid.size();
-        int cols = grid[0].size();
-
-        dp.assign(
-            rows,
-            vector<vector<int>>(
-                cols,
-                vector<int>(cols, -1)
-            )
-        );
-
-        return solve(0, 0, cols - 1, grid);
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(m, vector<int>(m, -1)));
+        return solve(0, 0, m - 1, grid, dp, n, m);
     }
 };
