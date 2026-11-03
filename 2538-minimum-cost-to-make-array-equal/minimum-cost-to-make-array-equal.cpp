@@ -1,7 +1,7 @@
 class Solution {
 public:
 
-long long findCost(vector<int> & nums, vector<int> & cost, int target)
+long long  findCost(vector<int> & nums, vector<int> & cost, int target)
 {
     long long result =0 ; 
     for(int i=0 ;i<nums.size();i++)
